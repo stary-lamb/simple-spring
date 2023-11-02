@@ -1,0 +1,47 @@
+package com.example.springframework.test;
+
+
+import cn.hutool.core.io.IoUtil;
+import com.example.springframework.beans.PropertyValue;
+import com.example.springframework.beans.PropertyValues;
+import com.example.springframework.beans.factory.config.BeanDefinition;
+import com.example.springframework.beans.factory.config.BeanReference;
+import com.example.springframework.beans.factory.support.DefaultListableBeanFactory;
+import com.example.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import com.example.springframework.context.support.ClassPathXmlApplicationContext;
+import com.example.springframework.core.io.DefaultResourceLoader;
+import com.example.springframework.core.io.Resource;
+import com.example.springframework.test.bean.UserDao;
+import com.example.springframework.test.bean.UserService;
+import com.example.springframework.test.common.MyBeanFactoryPostProcessor;
+import com.example.springframework.test.common.MyBeanPostProcessor;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.NoOp;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+public class ApiTest {
+
+
+    @Test
+    public void test_xml() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取Bean对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        String result = userService.queryUserInfo();
+        System.out.println("测试结果：" + result);
+    }
+
+    @Test
+    public void test_hook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("close！")));
+    }
+}
