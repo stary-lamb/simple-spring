@@ -36,15 +36,6 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
         return singletonObjects.get(beanName);
     }
 
-    /**
-     * 注册单例对象
-     * @param beanName bean的名称
-     * @param singletonObject 单例bean
-     */
-    protected void addSingleton(String beanName, Object singletonObject) {
-        singletonObjects.put(beanName, singletonObject);
-    }
-
     public void registerDisposableBean(String beanName,DisposableBean bean){
         disposableBeans.put(beanName,bean);
     }
@@ -66,7 +57,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     }
 
     @Override
-    public void registerSingleton(String beanName, ApplicationEventMulticaster singletonObject) {
+    public void registerSingleton(String beanName, Object singletonObject) {
         singletonObjects.put(beanName, singletonObject);
     }
 }
